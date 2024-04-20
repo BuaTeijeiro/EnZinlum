@@ -107,8 +107,8 @@ public class TokenContract {
             require(balanceOf(ownerPK) >= units);
             this.getBalances().compute(ownerPK, (pk, tokens) -> tokens - units);
             this.getBalances().put(recipient, balanceOf(recipient) + units);
-        } catch (Exception e) {
-            // fails silently
+        } catch (ConditionNotMetException e) {
+            System.out.println("No hay suficientes unidades para transferir, operación abortada");
         }      
     };
 
@@ -117,14 +117,14 @@ public class TokenContract {
             require(balanceOf(sender) >= units);
             this.getBalances().put(sender, balanceOf(sender) - units);
             this.getBalances().put(recipient, balanceOf(recipient) + units);
-        } catch (Exception e) {
-            // fails silently
-        }   
+        }  catch (ConditionNotMetException e) {
+            System.out.println("No hay suficientes unidades para transferir, operación abortada");
+        }
     }
 
-    private void require(Boolean holds) throws Exception {
-        if (! holds) {
-            throw new Exception();
+    private void require(Boolean holds) throws ConditionNotMetException {
+        if (!holds) {
+            throw new ConditionNotMetException();
         }
     }
 
@@ -156,8 +156,8 @@ public class TokenContract {
             Double units = Math.floor(enziniums / tokenPrice);
             transfer(recipient, units);
             this.owner.transferEZI(enziniums);
-        } catch (Exception e) {
-            // fail silently
+        }  catch (ConditionNotMetException e) {
+            System.out.println("El saldo no es suficiente para adquirir los productos, operacion abortada");
         }
     }
 }
