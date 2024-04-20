@@ -122,7 +122,7 @@ public class TokenContract {
         }
     }
 
-    private void require(Boolean holds) throws ConditionNotMetException {
+    void require(Boolean holds) throws ConditionNotMetException {
         if (!holds) {
             throw new ConditionNotMetException();
         }
